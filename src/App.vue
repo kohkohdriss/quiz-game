@@ -1,16 +1,13 @@
 <template>
   <div>
     <h1 v-html="this.question"></h1>
+    <template v-for="(answer, index) in this.answers" :key="index">
+      <input type="radio" name="options" value="answer" />
 
-    {{ correctAnswer }}
-    <div class="input">
-      <input type="radio" name="options" value="true" />
-      <label for="">True</label><br />
+      <label v-html="answer"></label><br />
+    </template>
 
-      <input type="radio" name="options" value="False" />
-      <label for="">False</label><br />
-      <button class="send" type="button">Send</button>
-    </div>
+    <button class="send" type="button">Send</button>
   </div>
 </template>
 
@@ -21,15 +18,18 @@ export default {
   data() {
     return {
       question: undefined,
-      incorrectAnswers: undefined,
+      incorrectAnswers: [],
       correctAnswer: undefined,
     };
   },
   computed: {
     answers() {
       var answers = JSON.parse(JSON.stringify(this.incorrectAnswers));
-      answers.push(this.correctAnswer);
-      answers.push("test");
+      answers.splice(
+        Math.round(Math.random() * answers.length),
+        0,
+        this.correctAnswer
+      );
       return answers;
     },
   },
