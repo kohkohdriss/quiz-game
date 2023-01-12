@@ -1,13 +1,22 @@
 <template>
-  <div>
+  <div v-if="this.question">
     <h1 v-html="this.question"></h1>
-    <template v-for="(answer, index) in this.answers" :key="index">
-      <input type="radio" name="options" value="answer" />
 
-      <label v-html="answer"></label><br />
+    <template v-for="(answer, index) in this.answers" v-bind:key="index">
+      <input
+        id="index"
+        type="radio"
+        name="options"
+        :value="answer"
+        v-model="this.chosen_answer"
+      />
+
+      <label v-html="answer" for="${answer + index}"></label><br />
     </template>
 
-    <button class="send" type="button">Send</button>
+    <button @click="this.submitAnswer()" class="send" type="button">
+      Send
+    </button>
   </div>
 </template>
 
@@ -20,6 +29,7 @@ export default {
       question: undefined,
       incorrectAnswers: [],
       correctAnswer: undefined,
+      chosen_answer: undefined,
     };
   },
   computed: {
@@ -31,6 +41,19 @@ export default {
         this.correctAnswer
       );
       return answers;
+    },
+  },
+  methods: {
+    submitAnswer() {
+      if (!this.chosen_answer) {
+        alert("pick one of the options");
+      } else {
+        if (this.chosen_answer == this.correctAnswer) {
+          alert("You got it right!");
+        } else {
+          alert("You got it wrong");
+        }
+      }
     },
   },
 
